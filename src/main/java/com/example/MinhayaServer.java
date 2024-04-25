@@ -27,7 +27,8 @@ public class MinhayaServer{
     private MainGame game;
 
     public static void main(String[] args) {
-        MinhayaServer server = new MinhayaServer();
+        WebSocketServer server = new WebSocketServer();
+        server.StartServer();
     }
 
     public MinhayaServer(){
