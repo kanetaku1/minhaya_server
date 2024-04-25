@@ -32,15 +32,16 @@ public class getQuiz {
       in.close();
 
       //JSON解析
-      JsonAnalyzer(response.toString());
+      JsonAnalyzer(response);
 
     } catch (IOException e){
         e.printStackTrace();
     } 
   }
 
-  private void JsonAnalyzer(String response){
-    JSONArray jsonArray = new JSONArray(response);
+  private void JsonAnalyzer(StringBuilder response){
+    System.out.println(response.toString());
+    JSONArray jsonArray = new JSONArray(response.toString());
     for (int i = 0; i < jsonArray.length(); i++){
       JSONObject jsonObject = jsonArray.getJSONObject(i);
       this.imagePath = jsonObject.getString("image_path");

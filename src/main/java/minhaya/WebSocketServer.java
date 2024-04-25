@@ -15,6 +15,7 @@ import java.util.List;
 public class WebSocketServer {
 
     private List<String> questions = new ArrayList<>();
+    private List<String> answers = new ArrayList<>();
     private int currentQuestionIndex = -1;
 
     public WebSocketServer() {
@@ -22,6 +23,7 @@ public class WebSocketServer {
         getQuiz quiz = new getQuiz();
         quiz.GetData();
         questions.add(quiz.question);
+        answers.add(quiz.answer);
         // ここではダミーデータを追加しています
         // questions.add("問題1: 1 + 1 は？");
         // questions.add("問題2: 東京の首都は？");
@@ -45,7 +47,7 @@ public class WebSocketServer {
         currentQuestionIndex++;
         if (currentQuestionIndex < questions.size()) {
             String question = questions.get(currentQuestionIndex);
-            session.getBasicRemote().sendText(question);
+            session.getBasicRemote().sendText("問題:"+question);
         } else {
             session.getBasicRemote().sendText("問題はこれで終了です。");
             // ここで必要な後処理を行う（例：最終結果を表示するなど）
@@ -56,7 +58,7 @@ public class WebSocketServer {
         // 回答を正誤判定する処理を実装し、結果をクライアントに送信する
         // ここでは単純化して、正解は"2"とする
         String result;
-        if (answer.equals("2")) {
+        if (answer.equals(answers.get(currentQuestionIndex))) {
             result = "正解です！次の問題を送信します。";
         } else {
             result = "不正解です。";
