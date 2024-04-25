@@ -1,4 +1,4 @@
-package com.example;
+package minhaya;
 
 import org.glassfish.tyrus.server.Server;
 
