@@ -21,8 +21,6 @@ public class WebSocketServer {
     public WebSocketServer() {
         // データベースから問題を取得するメソッドを呼び出して、questionsリストに問題を格納する
         quiz.GetData();
-        System.out.println("questions: " + quiz.questions);
-        System.out.println("answers: " + quiz.answers);
         // ここではダミーデータを追加しています
         // questions.add("問題1: 1 + 1 は？");
         // questions.add("問題2: 東京の首都は？");
@@ -44,6 +42,7 @@ public class WebSocketServer {
 
     private void sendNextQuestion(Session session) throws IOException {
         currentQuestionIndex++;
+        System.out.println("次の問題を表示します");
         if (currentQuestionIndex < quiz.questions.size()) {
             System.out.println("currentQuestion: " + quiz.questions.get(currentQuestionIndex));
             String question = quiz.questions.get(currentQuestionIndex);
@@ -61,13 +60,15 @@ public class WebSocketServer {
         System.out.println("currentAnswer: " + quiz.answers.get(currentQuestionIndex));
         if (answer.equals("回答:"+quiz.answers.get(currentQuestionIndex))) {
             result = "正解です！次の問題を送信します。";
+            System.out.println("正解です");
         } else {
             result = "不正解です。";
+            System.out.println("不正解です");
         }
         session.getBasicRemote().sendText(result);
-        if (!result.equals("不正解です。")) {
-            sendNextQuestion(session);
-        }
+        // if (!result.equals("不正解です。")) {
+        //     sendNextQuestion(session);
+        // }
     }
 
     public void StartServer() {
