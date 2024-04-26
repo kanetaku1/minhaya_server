@@ -5,15 +5,20 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class getQuiz {
 
-  public String imagePath;
-  public String genre;
-  public String question;
-  public String answer;
+  private String imagePath;
+  private String genre;
+  private String question;
+  private String answer;
+  public List<String> questions = new ArrayList<>();
+  public List<String> answers = new ArrayList<>();
   
   public void GetData(){
     try {
@@ -48,6 +53,9 @@ public class getQuiz {
       this.genre = jsonObject.getString("genre");
       this.question = jsonObject.getString("question");
       this.answer = jsonObject.getString("answer");
+
+      questions.add(this.question);
+      answers.add(this.answer);
 
       // ここで取得したデータを利用して何かを行う
       System.out.println("Image Path: " + imagePath);

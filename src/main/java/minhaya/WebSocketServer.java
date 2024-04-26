@@ -9,21 +9,20 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @ServerEndpoint("/websocket")
 public class WebSocketServer {
 
-    private List<String> questions = new ArrayList<>();
-    private List<String> answers = new ArrayList<>();
     private int currentQuestionIndex = -1;
+    getQuiz quiz = new getQuiz();
 
     public WebSocketServer() {
         // データベースから問題を取得するメソッドを呼び出して、questionsリストに問題を格納する
-        getQuiz quiz = new getQuiz();
         quiz.GetData();
-        questions.add(quiz.question);
-        answers.add(quiz.answer);
+        System.out.println("questions: " + quiz.questions);
+        System.out.println("answers: " + quiz.answers);
         // ここではダミーデータを追加しています
         // questions.add("問題1: 1 + 1 は？");
         // questions.add("問題2: 東京の首都は？");
@@ -36,7 +35,7 @@ public class WebSocketServer {
         // session.getBasicRemote().sendText("Server received your message: " + message);
         if (message.equals("request_question")) {
             sendNextQuestion(session);
-        } else {
+        } else if (message.startsWith("回答:")) {
             // クライアントからの回答を受け取り、正誤判定を行うメソッドを呼び出す
             String answer = message;
             checkAnswerAndSendResult(answer, session);
@@ -45,8 +44,9 @@ public class WebSocketServer {
 
     private void sendNextQuestion(Session session) throws IOException {
         currentQuestionIndex++;
-        if (currentQuestionIndex < questions.size()) {
-            String question = questions.get(currentQuestionIndex);
+        if (currentQuestionIndex < quiz.questions.size()) {
+            System.out.println("currentQuestion: " + quiz.questions.get(currentQuestionIndex));
+            String question = quiz.questions.get(currentQuestionIndex);
             session.getBasicRemote().sendText("問題:"+question);
         } else {
             session.getBasicRemote().sendText("問題はこれで終了です。");
@@ -58,7 +58,8 @@ public class WebSocketServer {
         // 回答を正誤判定する処理を実装し、結果をクライアントに送信する
         // ここでは単純化して、正解は"2"とする
         String result;
-        if (answer.equals(answers.get(currentQuestionIndex))) {
+        System.out.println("currentAnswer: " + quiz.answers.get(currentQuestionIndex));
+        if (answer.equals("回答:"+quiz.answers.get(currentQuestionIndex))) {
             result = "正解です！次の問題を送信します。";
         } else {
             result = "不正解です。";
