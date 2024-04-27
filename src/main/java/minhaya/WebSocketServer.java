@@ -72,7 +72,7 @@ public class WebSocketServer {
     }
 
     public void StartServer() {
-        Server server = new Server("localhost", 8080, "", null, WebSocketServer.class);
+        Server server = new Server("192.168.11.14", 8080, "", null, WebSocketServer.class);
         try {
             server.start();
             System.out.println("WebSocket server started...");
